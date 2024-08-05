@@ -33,6 +33,7 @@
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s;
         }
         p {
             margin: 20px 0;
@@ -57,6 +58,28 @@
         a:hover {
             text-decoration: underline;
         }
+
+        /* 图片轮播样式 */
+        .carousel {
+            position: relative;
+            max-width: 600px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .carousel img {
+            width: 100%;
+            display: none; /* 初始隐藏所有图片 */
+        }
+        .active {
+            display: block; /* 只有活跃的图片显示 */
+        }
+
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -65,12 +88,69 @@
     </header>
     <div class="content">
         <p>这是一个现代化的网页示例，灵感来源于苹果的设计理念，追求简约与优雅。</p>
-        <p>在这个页面中，你可以看到清晰的布局、充足的留白以及精致的排版，使内容更加易读且具有视觉吸引力。</p>
-        <p>感谢您的访问！如果你对我的作品感兴趣，可以通过以下链接了解更多信息：</p>
-        <p><a href="#">点击这里查看我的作品</a></p>
+
+        <!-- 当前时间 -->
+        <p>当前时间是：<span id="currentTime"></span></p>
+
+        <!-- 动态按钮 -->
+        <button id="myButton">点击我！</button>
+        <p id="message" style="display:none;">你真棒！</p>
+
+        <!-- 图片轮播 -->
+        <div class="carousel">
+            <img src="https://via.placeholder.com/600x400?text=图片1" class="active">
+            <img src="https://via.placeholder.com/600x400?text=图片2">
+            <img src="https://via.placeholder.com/600x400?text=图片3">
+        </div>
+
+        <!-- 反馈表单 -->
+        <h2>反馈表单</h2>
+        <form id="feedbackForm">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" required><br><br>
+            <label for="message">留言:</label>
+            <textarea id="message" required></textarea><br><br>
+            <button type="submit">提交</button>
+        </form>
+        <p id="formResponse" style="display:none;"></p>
     </div>
     <footer>
         <p>&copy; 2024 我的个人网页</p>
     </footer>
+
+    <script>
+        // 显示当前时间
+        function updateTime() {
+            const now = new Date();
+            document.getElementById("currentTime").innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000); // 每秒更新一次
+        updateTime(); // 页面加载时立即更新
+
+        // 按钮点击事件
+        document.getElementById("myButton").addEventListener("click", function() {
+            document.getElementById("message").style.display = "block";
+        });
+
+        // 图片轮播
+        let currentIndex = 0;
+        const images = document.querySelectorAll(".carousel img");
+
+        function showNextImage() {
+            images[currentIndex].classList.remove("active");
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add("active");
+        }
+        setInterval(showNextImage, 3000); // 每3秒切换一次
+
+        // 表单提交事件
+        document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 阻止默认提交
+            const name = document.getElementById("name").value;
+            const message = document.getElementById("message").value;
+            document.getElementById("formResponse").innerText = `感谢，${name}！你的留言已收到。`;
+            document.getElementById("formResponse").style.display = "block";
+        });
+    </script>
 </body>
 </html>
